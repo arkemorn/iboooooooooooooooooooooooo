@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from uvm18.assembler import assemble_source, parse_source
-from uvm18.interpreter import execute
+from uvm18.interpreter import execute, load_xml_memory
 from uvm18.isa import decode, encode
 
 
@@ -57,6 +57,23 @@ class ExecutionTests(unittest.TestCase):
         result = execute(assemble_source(source), memory)
         actual = [result[200 + i] for i in range(len(values))]
         self.assertEqual(actual, [value & 155 for value in values])
+
+    def test_three_demonstration_programs(self):
+        project = Path(__file__).resolve().parents[1]
+        examples = (
+            ("and.csv", "input.xml", 155),
+            ("and-high-bits.csv", "input-high-bits.xml", 0xFF00FF00),
+            ("and-sparse.csv", "input-sparse.xml", 42),
+        )
+        for program_name, input_name, mask in examples:
+            source_path = project / "examples" / program_name
+            input_path = project / "examples" / input_name
+            source = source_path.read_text(encoding="utf-8")
+            memory = load_xml_memory(input_path)
+            result = execute(assemble_source(source), memory)
+            actual = [result[200 + index] for index in range(6)]
+            expected = [memory[100 + index] & mask for index in range(6)]
+            self.assertEqual(actual, expected, program_name)
 
     def test_indirect_copy(self):
         source = "2, 10, 100\n2, 20, 3\n7, 0, 10, 30\n"

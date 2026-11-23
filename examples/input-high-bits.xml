@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<memory>
+  <memory address="100" value="0xFFFFFFFF" />
+  <memory address="101" value="0x80000000" />
+  <memory address="102" value="0x12345678" />
+  <memory address="103" value="0x55555555" />
+  <memory address="104" value="0" />
+  <memory address="105" value="0xFFFFFFFF" />
+</memory>
