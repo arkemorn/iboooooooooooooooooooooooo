@@ -41,8 +41,9 @@ def execute(machine_code, memory=None):
             target = pointer + fields["B"]
             _write(data_memory, fields["D"], _read(data_memory, target))
         elif opcode == 6:
-            source = _read(data_memory, fields["C"])
-            _write(data_memory, fields["B"], source + fields["D"])
+            source = _read(data_memory, fields["B"])
+            pointer = _read(data_memory, fields["C"])
+            _write(data_memory, pointer + fields["D"], source)
         elif opcode == 3:
             left = _read(data_memory, fields["D"])
             right = _read(data_memory, fields["B"])

@@ -63,6 +63,11 @@ class ExecutionTests(unittest.TestCase):
         result = execute(assemble_source(source), {100: 22})
         self.assertEqual(result[30], 22)
 
+    def test_indirect_write(self):
+        source = "2, 30, 42\n2, 10, 100\n6, 30, 10, 1\n"
+        result = execute(assemble_source(source))
+        self.assertEqual(result[101], 42)
+
     def test_rejects_wrong_operand_count(self):
         with self.assertRaisesRegex(ValueError, "expects"):
             parse_source("2, 1\n")
